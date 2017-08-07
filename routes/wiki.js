@@ -6,23 +6,34 @@ const Page = models.Page;
 const User = models.User;
 
 router.get('/', function(req, res){
-	res.redirect('/');
+	Page.findAll({}).then((allPages) => res.render('index', {pages: allPages}));
 })
 
 router.get('/add', function(req, res){
 	res.render('addpage');
 })
 
-router.post('/', function(req, res){
+router.get('/:url', function(req, res, next) {
+	let url = req.params.url;
+	Page.findOne({
+		where: {
+			urlTitle: url
+		}
+	})
+	.then((foundPage) => res.render('wikipage', { PageData: foundPage }))
+	.catch(next);
+});
+
+router.post('/', function(req, res, next){
 	var page = Page.build({
 		title : req.body.title,
 		content: req.body.content,
-		urlTitle : 'localhost:3000/wiki/' + req.body.title
 	});
 	page.save()
 	.then( function() {
-		res.redirect('/');
-	});
+		res.redirect('/wiki/' + page.urlTitle);
+	})
+	.catch(next);
 })
 
 module.exports = router;

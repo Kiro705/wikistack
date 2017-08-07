@@ -23,7 +23,14 @@ let Page = db.define('page', {
     	type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
     }
-});
+}, { 
+    hooks: {
+        beforeValidate: (page, options) => {
+            page.urlTitle = generateUrlTitle(page.title);
+        }
+    }
+}
+);
 
 let User = db.define('user', {
     name: {
@@ -39,8 +46,21 @@ let User = db.define('user', {
     }
 });
 
+function generateUrlTitle (title) {
+    console.log('this is getting run');
+  if (title) {
+    // Removes all non-alphanumeric characters from title
+    // And make whitespace underscore
+    return title.replace(/\s+/g, '_').replace(/\W/g, '');
+  } else {
+    // Generates random 5 letter string
+    return Math.random().toString(36).substring(2, 7);
+  }
+}
+
 module.exports = {
     db: db,
     Page: Page, 
     User: User,
+
 }

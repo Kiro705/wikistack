@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', routes);
 app.use(express.static('public'));
 
-models.db.sync({force: true})
+models.db.sync({})
 .then(function() {
     app.listen(3000, function() {
     console.log('Hello There');
