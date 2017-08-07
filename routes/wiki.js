@@ -25,12 +25,25 @@ router.get('/:url', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next){
-	var page = Page.build({
-		title : req.body.title,
-		content: req.body.content,
-	});
-	page.save()
-	.then( function() {
+	User.findOrCreate({
+		where: {
+			name: req.body.author, 
+			email: req.body.email
+		}
+	})
+	.then(function(result) {
+		let user = result[0];
+		var page = Page.build({
+			title : req.body.title,
+			content: req.body.content,
+			// authorID: req.body.authorID
+		});
+		return page.save()
+		.then(function(page) {
+			return page.setAuthor(user);
+		})
+	})
+	.then(function(page) {
 		res.redirect('/wiki/' + page.urlTitle);
 	})
 	.catch(next);

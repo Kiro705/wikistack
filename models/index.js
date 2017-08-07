@@ -46,6 +46,8 @@ let User = db.define('user', {
     }
 });
 
+Page.belongsTo(User, { as: 'author'});
+
 function generateUrlTitle (title) {
     console.log('this is getting run');
   if (title) {
