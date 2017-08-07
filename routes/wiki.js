@@ -18,9 +18,15 @@ router.get('/:url', function(req, res, next) {
 	Page.findOne({
 		where: {
 			urlTitle: url
-		}
+		}, 
+		include : [{
+			model: User,
+			as: "author"
+		}]
 	})
-	.then((foundPage) => res.render('wikipage', { PageData: foundPage }))
+	.then((foundPage) => {
+		res.render('wikipage', { PageData: foundPage })
+	})
 	.catch(next);
 });
 

@@ -5,6 +5,8 @@ const wikiRouter = require('./wiki');
 const userRouter = require('./user');
 
 router.use('/wiki', wikiRouter);
+router.use('/users', userRouter);
+
 router.get('/', function(req, res, next) {
     res.redirect('/wiki/');
 })
