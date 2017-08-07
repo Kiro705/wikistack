@@ -12,13 +12,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', routes);
 app.use(express.static('public'));
 
-models.db.sync({ force: true })
+models.db.sync({force: true})
 .then(function() {
-    app.listen(5432, function() {
+    app.listen(3000, function() {
     console.log('Hello There');
     });
 })
-.catch(console.error);
+.catch((err) => {console.log('caught it!', err)});
 
 
 
